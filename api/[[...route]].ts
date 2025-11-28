@@ -1,12 +1,22 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import { createApp } from "../server/serverless";
 
-// Import the built server module directly
-const module = await import("../dist/index.cjs");
-const app = module.default || module;
+let app: any = null;
 
 export default async (req: VercelRequest, res: VercelResponse) => {
+  if (!app) {
+    app = await createApp();
+  }
+
   return new Promise<void>((resolve) => {
     app(req, res);
-    res.on("finish", resolve);
+    res.on("finish", () => resolve());
+    
+    setTimeout(() => {
+      if (!res.headersSent) {
+        res.status(504).end("Timeout");
+      }
+      resolve();
+    }, 29000);
   });
 };
