@@ -3,13 +3,5 @@
   "outputDirectory": "dist",
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "api/[[...route]].ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/[[...route]]" }
-  ]
+  }
 }
